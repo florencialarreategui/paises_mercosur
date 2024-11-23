@@ -68,3 +68,21 @@ footer {
     height: 400px; /* Altura del mapa */
     width: 100%;
 }
+
+.card-img-top {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: 200px; /* Establece una altura fija para la imagen */
+    object-fit: cover; /* Hace que la imagen se recorte para cubrir todo el área sin distorsionarse */
+    object-position: center; /* Centra la imagen dentro de su contenedor */
+}
+
+.card.selected {
+    transform: scale(1.05);  /* Aumenta el tamaño de la card al 105% */
+    background-color: #f8f9fa;  /* Cambia el fondo a un gris claro */
+    transition: transform 0.3s ease, background-color 0.3s ease;  /* Transición suave */
+}
+
+.card.selected img {
+    transform: scale(1.1);  /* Aumenta el tamaño de la imagen dentro de la card */
+    transition: transform 0.3s ease;
+}
