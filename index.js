@@ -42,7 +42,6 @@ window.onload = loadCountries;
 //----------------------------------------------------------------------------
  // Función para cargar la información de un país específico
  async function loadCountryInfo(countryName) {
-   
     try {
         // Solicitar los datos del país a la API
         const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
@@ -62,6 +61,41 @@ window.onload = loadCountries;
         const countryCode = country.cca2.toLowerCase();
         const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
         document.getElementById('country-flag').src = flagUrl;
+
+                // Validar latlng antes de usarlo
+                if (country.latlng && country.latlng.length === 2) {
+                    const map = L.map('map').setView([country.latlng[0], country.latlng[1]], 6); // Usamos las coordenadas del país (si están disponibles)
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                    
+                    // Ejemplo de puntos turísticos (coordenadas, estos pueden ser modificados según el país)
+                    const touristSpots = [
+                        {
+                            name: "Cristo Redentor",
+                            lat: -22.9519,
+                            lng: -43.2105,
+                            description: "Famosa estatua en Río de Janeiro, Brasil."
+                        },
+                        {
+                            name: "Cataratas del Iguazú",
+                            lat: -25.6953,
+                            lng: -54.4367,
+                            description: "Impresionante caída de agua en la frontera de Brasil y Argentina."
+                        }
+                    ];
+        
+                    // Agregar marcadores para los puntos turísticos
+                    touristSpots.forEach(spot => {
+                        L.marker([spot.lat, spot.lng])
+                            .addTo(map)
+                            .bindPopup(`<b>${spot.name}</b><br>${spot.description}`)
+                            .openPopup();
+                    });
+                } else {
+                    console.error('No se encontraron coordenadas para el país');
+                }
+
     } catch (error) {
         console.error('Error al cargar la información del país:', error);
     }
@@ -69,3 +103,5 @@ window.onload = loadCountries;
 // Llamar a la función para cargar la información del país cuando se cargue la página
 const countryName = window.location.pathname.split('/').pop().split('.')[0]; // Usar el nombre del archivo
 loadCountryInfo(countryName);
+
+
