@@ -63,3 +63,8 @@ footer {
 .card:hover .card-body {
     background-color: #f1f1f1; 
 }
+
+#map {
+    height: 400px; /* Altura del mapa */
+    width: 100%;
+}

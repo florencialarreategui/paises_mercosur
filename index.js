@@ -62,39 +62,6 @@ window.onload = loadCountries;
         const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
         document.getElementById('country-flag').src = flagUrl;
 
-                // Validar latlng antes de usarlo
-                if (country.latlng && country.latlng.length === 2) {
-                    const map = L.map('map').setView([country.latlng[0], country.latlng[1]], 6); // Usamos las coordenadas del país (si están disponibles)
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-                    
-                    // Ejemplo de puntos turísticos (coordenadas, estos pueden ser modificados según el país)
-                    const touristSpots = [
-                        {
-                            name: "Cristo Redentor",
-                            lat: -22.9519,
-                            lng: -43.2105,
-                            description: "Famosa estatua en Río de Janeiro, Brasil."
-                        },
-                        {
-                            name: "Cataratas del Iguazú",
-                            lat: -25.6953,
-                            lng: -54.4367,
-                            description: "Impresionante caída de agua en la frontera de Brasil y Argentina."
-                        }
-                    ];
-        
-                    // Agregar marcadores para los puntos turísticos
-                    touristSpots.forEach(spot => {
-                        L.marker([spot.lat, spot.lng])
-                            .addTo(map)
-                            .bindPopup(`<b>${spot.name}</b><br>${spot.description}`)
-                            .openPopup();
-                    });
-                } else {
-                    console.error('No se encontraron coordenadas para el país');
-                }
 
     } catch (error) {
         console.error('Error al cargar la información del país:', error);
@@ -104,4 +71,53 @@ window.onload = loadCountries;
 const countryName = window.location.pathname.split('/').pop().split('.')[0]; // Usar el nombre del archivo
 loadCountryInfo(countryName);
 
+// Inicialización del mapa interactivo
+const map = L.map('map').setView([0, 0], 2); // Ubicación inicial del mapa, zoom nivel 2
 
+// Cargar las capas del mapa
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+// Función para cargar información del país
+async function loadCountryInfo(countryName) {
+    try {
+        // Hacer la solicitud a la API de RestCountries
+        const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+        const data = await response.json();
+        const country = data[0];
+
+        // Obtener las coordenadas
+        const coords = country.latlng;
+
+        // Actualizar información del país en la página
+        document.getElementById('country-title').innerText = `Información sobre ${country.name.common}`;
+        document.getElementById('country-name').innerText = country.name.common;
+        document.getElementById('country-capital').innerText = country.capital ? country.capital[0] : 'No disponible';
+        document.getElementById('country-population').innerText = country.population.toLocaleString();
+        document.getElementById('country-languages').innerText = Object.values(country.languages || {}).join(', ');
+        document.getElementById('country-currency').innerText = Object.values(country.currencies || {}).map(c => c.name).join(', ');
+        document.getElementById('country-region').innerText = `${country.region} - ${country.subregion}`;
+
+        // Cambiar la bandera
+        const countryCode = country.cca2.toLowerCase();
+        const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
+        document.getElementById('country-flag').src = flagUrl;
+
+        // Centrar el mapa en el país
+        map.setView(coords, 5); // Ajustar zoom y centrar en las coordenadas del país
+
+        // Añadir un marcador en el mapa para el país
+        L.marker(coords).addTo(map).bindPopup(`<b>${country.name.common}</b><br>${country.capital}`);
+
+        // Ajustar el tamaño del mapa para que se redibuje correctamente
+        setTimeout(() => map.invalidateSize(), 200);
+
+    } catch (error) {
+        console.error('Error al cargar la información del país:', error);
+    }
+}
+
+// Cargar la información del país por nombre (Ejemplo: Argentina)
+// Llamar a la función para cargar la información del país cuando se cargue la página
+loadCountryInfo(countryName);
