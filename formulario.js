@@ -1,4 +1,4 @@
-const form = document.getElementById('subscription-form');
+const form = document.getElementById('subscription1-form');
 
         // Manejar el envío del formulario
         form.addEventListener('submit', async (e) => {
@@ -17,7 +17,7 @@ const form = document.getElementById('subscription-form');
             };
 
             // URL de la MockAPI
-            const apiUrl = 'https://6737db304eb22e24fca64f87.mockapi.io/subscripciones/subscripcion';
+            const apiUrl ='https://670ee5203e7151861656108a.mockapi.io/API/subcripciones1'
 
             try {
                 // Enviar los datos a la API usando fetch
