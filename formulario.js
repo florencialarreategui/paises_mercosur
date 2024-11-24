@@ -13,11 +13,11 @@ const form = document.getElementById('suscripciones1-form');
             const data = {
                 nombre: nombre,
                 dni: dni,
-                email: email
+                email: email,
             };
 
             // URL de la MockAPI
-            const apiUrl ='https://670ee5203e7151861656108a.mockapi.io/API/:suscripciones1'
+            const apiUrl ='https://670ee5203e7151861656108a.mockapi.io/API/suscripciones2'
 
             try {
                 // Enviar los datos a la API usando fetch
