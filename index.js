@@ -248,5 +248,11 @@ async function loadCountryInfo(countryName) {
             // Resaltar la card asociada
             card.classList.add('selected'); // Añadir la clase 'selected' a la card correspondiente
         });
+         // Al hacer clic en la card, centrar el mapa y hacer zoom en el punto turístico
+         card.addEventListener('click', function() {
+            map.setView(spot.coords, 8); // Centrar el mapa y hacer zoom en el punto turístico
+            // También podrías agregar un marcador temporal para este punto si lo deseas:
+            L.marker(spot.coords).addTo(map).bindPopup(`<b>${spot.name}</b><br>${spot.description}`).openPopup();
+        });
     });
 }
