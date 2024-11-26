@@ -1,19 +1,19 @@
 async function loadCountries() {
-    const countries = ['Argentina', 'Uruguay', 'Brazil', 'Paraguay']; // Lista de países que queremos mostrar
+    const countries = ['Argentina', 'Uruguay', 'Brazil', 'Paraguay']; 
 
     const countryCardsContainer = document.getElementById('country-cards');
-    // countryCardsContainer.innerHTML = ''; // Limpiar el contenedor antes de cargar nuevos datos
+   
 
     for (let country of countries) {
         try {
             const response = await fetch(`https://restcountries.com/v3.1/name/${country}`);
             const data = await response.json();
-            const countryInfo = data[0]; // Usamos el primer país (por nombre)
-            
-            // Usamos el código de país en formato ISO 3166-1 alfa-2 (como "ar" para Argentina)
-        const countryCode = countryInfo.cca2.toLowerCase(); // Obtiene el código de país (ej. 'AR')
+            const countryInfo = data[0]; 
+
+           
+        const countryCode = countryInfo.cca2.toLowerCase(); 
         // Generamos la URL de la bandera usando la API de flagcdn
-        const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`; // URL de la bandera
+        const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`; 
 
             const cardHTML = `
                 <div class="col-md-4 mb-4">
@@ -29,26 +29,26 @@ async function loadCountries() {
                 </div>
             `;
 
-            countryCardsContainer.innerHTML += cardHTML; // Agregar la tarjeta al contenedor
+            countryCardsContainer.innerHTML += cardHTML; 
         } catch (error) {
             console.error('Error al cargar la información del país:', error);
         }
     }
 }
 
-// Llamar a la función para cargar los países cuando la página se carga
+
 window.onload = loadCountries;
 
 //----------------------------------------------------------------------------
- // Función para cargar la información de un país específico
+ 
  async function loadCountryInfo(countryName) {
     try {
-        // Solicitar los datos del país a la API
+        
         const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
         const data = await response.json();
         const country = data[0];
 
-        // Actualizar el contenido del HTML con los datos obtenidos
+        
         document.getElementById('country-title').innerText = `Información sobre ${country.name.common}`;
         document.getElementById('country-name').innerText = country.name.common;
         document.getElementById('country-capital').innerText = country.capital ? country.capital[0] : 'No disponible';
@@ -57,7 +57,7 @@ window.onload = loadCountries;
         document.getElementById('country-currency').innerText = Object.values(country.currencies || {}).map(c => c.name).join(', ');
         document.getElementById('country-region').innerText = `${country.region} - ${country.subregion}`;
 
-        // Establecer la bandera usando el código del país
+       
         const countryCode = country.cca2.toLowerCase();
         const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
         document.getElementById('country-flag').src = flagUrl;
@@ -67,32 +67,32 @@ window.onload = loadCountries;
         console.error('Error al cargar la información del país:', error);
     }
 }
-// Llamar a la función para cargar la información del país cuando se cargue la página
-const countryName = window.location.pathname.split('/').pop().split('.')[0]; // Usar el nombre del archivo
+
+const countryName = window.location.pathname.split('/').pop().split('.')[0]; 
 loadCountryInfo(countryName);
 
-// Inicialización del mapa interactivo
-const map = L.map('map').setView([0, 0], 2); // Ubicación inicial del mapa, zoom nivel 2
 
-// Cargar las capas del mapa
+const map = L.map('map').setView([0, 0], 2); 
+
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-// Función para cargar información del país
+
 async function loadCountryInfo(countryName) {
    
     try {
         
-        // Hacer la solicitud a la API de RestCountries
+        
         const response = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
         const data = await response.json();
         const country = data[0];
 
-        // Obtener las coordenadas
+        
         const coords = country.latlng;
 
-        // Actualizar información del país en la página
+        
         document.getElementById('country-title').innerText = `Información sobre ${country.name.common}`;
         document.getElementById('country-name').innerText = country.name.common;
         document.getElementById('country-capital').innerText = country.capital ? country.capital[0] : 'No disponible';
@@ -101,21 +101,21 @@ async function loadCountryInfo(countryName) {
         document.getElementById('country-currency').innerText = Object.values(country.currencies || {}).map(c => c.name).join(', ');
         document.getElementById('country-region').innerText = `${country.region} - ${country.subregion}`;
 
-        // Cambiar la bandera
+        
         const countryCode = country.cca2.toLowerCase();
         const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
         document.getElementById('country-flag').src = flagUrl;
 
-          // Centrar el mapa en el país
-          map.setView(coords, 5); // Ajustar zoom y centrar en las coordenadas del país
+         
+          map.setView(coords, 5); 
 
-          // Añadir un marcador en el mapa para el país
+          
           L.marker(coords).addTo(map).bindPopup(`<b>${country.name.common}</b><br>${country.capital}`);
   
-          // Añadir puntos turísticos
+          
           addTouristSpots(countryName, coords);
   
-          // Ajustar el tamaño del mapa para que se redibuje correctamente
+          
           setTimeout(() => map.invalidateSize(), 200);
   
       } catch (error) {
@@ -124,13 +124,13 @@ async function loadCountryInfo(countryName) {
   }
   
  function addTouristSpots(countryName, countryCoords) {
-    // Contenedor donde se agregarán las cards de los puntos turísticos
+    
     const touristSpotsContainer = document.getElementById('tourist-spots-container');
 
-    // Limpiar cualquier card existente antes de agregar nuevas
+    
     touristSpotsContainer.innerHTML = '';
 
-    // Definir puntos turísticos por país (con imágenes y descripciones)
+    
     const touristSpots = {
         'argentina': [
             { 
@@ -214,16 +214,16 @@ async function loadCountryInfo(countryName) {
         ]
     };
 
-    const spots = touristSpots[countryName] || []; // Obtiene los puntos turísticos del país
+    const spots = touristSpots[countryName] || []; 
 
-    // Añadir los puntos turísticos al mapa
+    
     spots.forEach(spot => {
-        // Crear un marcador en el mapa
+        
         const marker = L.marker(spot.coords).addTo(map).bindPopup(`<b>${spot.name}</b>`);
 
-        // Crear una card para el punto turístico
+        
         const card = document.createElement('div');
-        card.classList.add('col-12', 'col-md-4', 'mb-3'); // Clase de Bootstrap para fila
+        card.classList.add('col-12', 'col-md-4', 'mb-3'); 
         card.innerHTML = `
             <div class="card">
                 <img src="${spot.image}" class="card-img-top" alt="${spot.name}">
@@ -234,24 +234,23 @@ async function loadCountryInfo(countryName) {
             </div>
         `;
 
-        // Agregar la card al contenedor debajo del mapa
+       
         touristSpotsContainer.appendChild(card);
 
-        // Al hacer clic en el marcador, resaltar la card asociada
+       
         marker.on('click', function() {
-            // Limpiar todas las cards
+            
             const allCards = touristSpotsContainer.querySelectorAll('.card');
             allCards.forEach(card => {
-                card.classList.remove('selected'); // Quitar la clase 'selected' de todas las cards
+                card.classList.remove('selected'); 
             });
 
-            // Resaltar la card asociada
-            card.classList.add('selected'); // Añadir la clase 'selected' a la card correspondiente
+            
+            card.classList.add('selected'); 
         });
-         // Al hacer clic en la card, centrar el mapa y hacer zoom en el punto turístico
+         
          card.addEventListener('click', function() {
-            map.setView(spot.coords, 8); // Centrar el mapa y hacer zoom en el punto turístico
-            // También podrías agregar un marcador temporal para este punto si lo deseas:
+            map.setView(spot.coords, 8); 
             L.marker(spot.coords).addTo(map).bindPopup(`<b>${spot.name}</b><br>${spot.description}`).openPopup();
         });
     });
